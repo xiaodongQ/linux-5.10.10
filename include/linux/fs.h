@@ -1915,6 +1915,7 @@ static inline ssize_t call_read_iter(struct file *file, struct kiocb *kio,
 static inline ssize_t call_write_iter(struct file *file, struct kiocb *kio,
 				      struct iov_iter *iter)
 {
+	// 调用具体文件系统的 write_iter 注册接口
 	return file->f_op->write_iter(kio, iter);
 }
 

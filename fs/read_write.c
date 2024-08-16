@@ -506,6 +506,10 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
 
 static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t len, loff_t *ppos)
 {
+	// struct iovec 是一个在 Unix 和类 Unix 系统（包括 Linux）中广泛使用的结构体，
+		// 用于支持分散读取（scatter read）和聚合写入（gather write）的 I/O 操作。
+		// 这种机制允许程序在一个系统调用中从多个不同的缓冲区读取或写入数据，而不是像普通的 read 或 write 系统调用那样只处理单一的缓冲区。
+		// 使用场景：`readv`、`writev`
 	struct iovec iov = { .iov_base = (void __user *)buf, .iov_len = len };
 	struct kiocb kiocb;
 	// `struct iov_iter` 是 Linux 内核中用于管理 I/O 操作中数据缓冲区的迭代器。

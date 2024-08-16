@@ -452,10 +452,12 @@ out:
 	return ret;
 }
 
+// 文件指定 O_DIRECT 时的写入
 static ssize_t ext4_dio_write_iter(struct kiocb *iocb, struct iov_iter *from)
 {
 	ssize_t ret;
 	handle_t *handle;
+	// 获取对应的inode
 	struct inode *inode = file_inode(iocb->ki_filp);
 	loff_t offset = iocb->ki_pos;
 	size_t count = iov_iter_count(from);
@@ -646,9 +648,11 @@ out:
 }
 #endif
 
+// ext4注册给 .write_iter 的实现接口
 static ssize_t
 ext4_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
 {
+	// 从 struct file 里获取 inode
 	struct inode *inode = file_inode(iocb->ki_filp);
 
 	if (unlikely(ext4_forced_shutdown(EXT4_SB(inode->i_sb))))
@@ -658,6 +662,7 @@ ext4_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
 	if (IS_DAX(inode))
 		return ext4_dax_write_iter(iocb, from);
 #endif
+	// vfs层根据file初始化了iocb，file若带了O_DIRECT则进此处语句块
 	if (iocb->ki_flags & IOCB_DIRECT)
 		return ext4_dio_write_iter(iocb, from);
 	else
@@ -893,7 +898,7 @@ loff_t ext4_llseek(struct file *file, loff_t offset, int whence)
 const struct file_operations ext4_file_operations = {
 	.llseek		= ext4_llseek,
 	.read_iter	= ext4_file_read_iter,
-	// vfs写会调用此处
+	// vfs写会调用此处注册的接口
 	.write_iter	= ext4_file_write_iter,
 	.iopoll		= iomap_dio_iopoll,
 	.unlocked_ioctl = ext4_ioctl,
