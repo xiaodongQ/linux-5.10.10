@@ -2189,6 +2189,7 @@ static void __inode_dio_wait(struct inode *inode)
 	do {
 		prepare_to_wait(wq, &q.wq_entry, TASK_UNINTERRUPTIBLE);
 		if (atomic_read(&inode->i_dio_count))
+			// io调度
 			schedule();
 	} while (atomic_read(&inode->i_dio_count));
 	finish_wait(wq, &q.wq_entry);

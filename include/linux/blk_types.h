@@ -253,6 +253,7 @@ struct bio {
 
 	atomic_t		__bi_cnt;	/* pin count */
 
+	// 内存段
 	struct bio_vec		*bi_io_vec;	/* the actual vec list */
 
 	struct bio_set		*bi_pool;

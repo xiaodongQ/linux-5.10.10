@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.am": "makefile",
+        "iterator": "c"
+    }
+}
