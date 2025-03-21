@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "*.am": "makefile",
-        "iterator": "c"
+        "iterator": "c",
+        "eventpoll.h": "c",
+        "ios": "c",
+        "random": "c",
+        "__node_handle": "c"
     }
 }
